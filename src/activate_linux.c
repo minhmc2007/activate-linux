@@ -76,8 +76,8 @@ int main(int argc, char **argv)
 	}
 
 	struct config conf;
-	conf.title = argc > 1 ? argv[1] : "Activate Linux";
-	conf.subtitle = argc > 2 ? argv[2] : "Go to Settings to activate Linux.";
+	conf.title = argc > 1 ? argv[1] : "Activate Blue Archive Linux";
+	conf.subtitle = argc > 2 ? argv[2] : "Go to Settings to activate Blue Archive Linux.";
 	GtkApplication *app = gtk_application_new(NULL, G_APPLICATION_DEFAULT_FLAGS);
 	g_signal_connect(app, "activate", G_CALLBACK(activate), (void *)&conf);
 	int status = g_application_run(G_APPLICATION(app), 0, NULL);

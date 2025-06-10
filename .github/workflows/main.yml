@@ -1,0 +1,46 @@
+# .github/workflows/build.yml
+
+name: Build and Release Binary
+
+# This action runs on every push to the main/master branch
+on:
+  push:
+    branches: [ "main", "master" ]
+
+jobs:
+  build:
+    # We want to build an x86_64 binary, so we use a standard ubuntu runner
+    name: Build for Linux (x86_64)
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Check out the repository's code so the runner can use it
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Step 2: Install all build dependencies required by the Makefile
+      - name: Install Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential pkg-config libgtk-3-dev libgtk-layer-shell-0-dev
+
+      # Step 3: Run the Makefile. Since the runner is x86_64, this creates an x86_64 binary.
+      - name: Compile the application
+        run: make
+
+      # Step 4: Verify the binary was created successfully
+      - name: Verify build artifact
+        run: |
+          echo "Checking the contents of the bin/ directory:"
+          ls -l bin/
+          echo "Checking the file type of the binary:"
+          file bin/activate-linux
+
+      # Step 5: Upload the compiled binary as a downloadable artifact
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          # The name of the artifact in the GitHub UI
+          name: activate-linux-x86_64
+          # The path to the file to upload
+          path: bin/activate-linux
